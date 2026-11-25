@@ -51,6 +51,12 @@ the case with `ACCEPTED+RELEASED`. Then the next lane goes.
 The coordinator drafts messages to customers and colleagues but never sends
 them. Anything that leaves the building goes through you.
 
+If the agent tool you run it in can reach your chat, email, and documents, the
+coordinator reads those on each watch too, and leaves its replies as drafts.
+Watchkeeper doesn't ship those connections. They come from your tool.
+[Working with the outside world](docs/working-with-the-outside-world.md) covers
+how to do it safely.
+
 ## Quickstart
 
 You need Python 3.10 or later and a POSIX shell: macOS, Linux, or Windows
