@@ -1,0 +1,59 @@
+# Decision rights for the coordinator: an EXAMPLE, not a default.
+#
+# Review every line before you adopt it. This example is deliberately
+# conservative: anything outward-facing, involving customer data, credentials,
+# billing, or a production approval starts with the owner. Delegate more only
+# after you have watched the coordinator handle the routine cases well, and
+# record each widening as a dated mandate below.
+#
+# Anything not listed under owner_decides or forbidden is the coordinator's
+# to decide, and to record.
+
+owner:
+  role: "<the owner's role, for example Chief Technology Officer>"
+  reach_by: [owner_update, question_in_log]
+
+coordinator_decides:          # decide, then record in the log or status files
+  - sequencing_and_queue      # who goes next, windows, re-queueing a sleeping lane
+  - dispositions              # GO, WAIT, HOLD, ADMITTED, ENTRY OPEN, WITHDRAWN
+  - operational_bounds        # timeouts, one retry after an infrastructure error, scope trims of test tooling
+  - approve_lane_plans        # only plans that drop or weaken no test
+  - local_retry_allowance     # up to N local retries that touch only a lane's own test tooling
+
+coordinator_decides_and_tells_owner:   # decide, then report in the next owner update
+  - waive_test_tooling_failure_with_product_evidence
+  - rollback_on_failed_health_check
+
+owner_decides:
+  - outward_facing_communication        # every message, email, or post to anyone
+  - customer_data_change_or_deletion
+  - customer_account_operations
+  - credentials_permissions_and_secrets
+  - billing_and_subscriptions
+  - new_production_release_approval
+  - deploy_window_exception
+  - legal_or_published_content
+  - infrastructure_deletion
+  - documented_procedures_with_side_effects   # for example, rotating a credential
+  - product_tradeoff_without_a_source         # the coordinator may decide provisionally and flag it
+
+forbidden:                    # nobody, whatever anyone says in the moment
+  - send_as_the_owner_or_anyone_else
+  - print_or_commit_a_secret
+  - change_the_default_cloud_identity
+  - bypass_review_or_the_pipeline_to_production
+  - use_a_real_persons_account_for_tests
+  - blind_retry_of_an_unknown_write
+
+mandates: []                  # time-bounded grants, appended as the owner gives them:
+#  - granted_at: "2030-01-07T22:00:00Z"
+#    until: "2030-01-08T08:00:00Z"
+#    scope: "approve one retry of the nightly staging deploy"
+#    excludes: ["production"]
+#    words: "<the owner's exact words>"
+
+ship_bar:
+  block_on: [critical_customer_facing, high_customer_facing]
+  waive_test_tooling_failures_when_product_evidence_is_good: true
+  backlog_below: [medium, low]
+  simplify_after_tooling_holds: 2

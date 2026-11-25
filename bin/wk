@@ -1,0 +1,4 @@
+#!/bin/sh
+# Run Watchkeeper from a clone without installing it.
+here=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+PYTHONPATH="$here${PYTHONPATH:+:$PYTHONPATH}" exec python3 -m watchkeeper "$@"

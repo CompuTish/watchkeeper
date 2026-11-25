@@ -1,0 +1,46 @@
+name: tests
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        python: ["3.10", "3.13"]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Unit tests
+        run: python -m unittest discover -s tests -t tests -v
+      - name: Toy example replays
+        run: examples/toy-project/replay.sh
+      - name: Quickstart from the README
+        run: |
+          export PATH="$PWD/bin:$PATH"
+          wk --version
+          cd "$(mktemp -d)"
+          wk init --lanes ALPHA,BETA
+          wk post --as ALPHA --to COORDINATOR REQUEST OP-0001 "checkout fix" --body "About 20 minutes on staging."
+          wk read --as COORDINATOR
+          wk read --as COORDINATOR --ack
+          wk post --as COORDINATOR --to ALPHA ADMITTED OP-0001
+          wk post --as COORDINATOR --to ALPHA "ENTRY OPEN" OP-0001 14:00Z-14:30Z
+          wk status set ALPHA OP-0001
+          wk status
+          wk lint
+      - name: Install from source
+        run: |
+          python -m venv /tmp/venv
+          /tmp/venv/bin/pip install .
+          /tmp/venv/bin/wk --version
+          /tmp/venv/bin/watchkeeper --version

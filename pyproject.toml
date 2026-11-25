@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "watchkeeper"
+version = "0.1.0"
+description = "A lane coordinator for AI agents: a shared log, one lock, and a coordinator that keeps watch."
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Aatish Thakerar" }]
+requires-python = ">=3.10"
+dependencies = []
+
+[project.urls]
+Source = "https://github.com/CompuTish/watchkeeper"
+
+[project.scripts]
+watchkeeper = "watchkeeper.cli:main"
+wk = "watchkeeper.cli:main"
+
+[tool.setuptools]
+packages = ["watchkeeper"]
+
+[tool.setuptools.package-data]
+watchkeeper = ["log_head.md"]
