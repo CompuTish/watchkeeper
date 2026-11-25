@@ -163,7 +163,13 @@ The design was worked out in daily use, coordinating many agents on a real
 software product. The first version ran for more than five weeks and grew a lot
 of machinery. This second version keeps the principles and drops most of the
 machinery. It turned out to be just as effective and much easier to live with.
-[The full variant](docs/v2-full-variant.md) tells that story.
+[The full variant](docs/v2-full-variant.md) tells that story, and
+[Keeping Watch](https://thingsicompute.com/blog/keeping-watch/) explains why it
+exists and why it is open source.
+
+Feedback is welcome, good or bad. Open an
+[issue](https://github.com/CompuTish/watchkeeper/issues) or get in touch through
+the [project page](https://thingsicompute.com/projects/watchkeeper/).
 
 ## Licence
 
