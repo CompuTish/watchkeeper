@@ -95,6 +95,24 @@ If you'd rather have `wk` installed than on your `PATH`, run
 `pip install git+https://github.com/CompuTish/watchkeeper` inside a virtual
 environment. Watchkeeper is not published on the Python Package Index.
 
+## Use it on your own project
+
+When you're ready to point it at real work, [getting started](docs/getting-started.md)
+walks through it step by step. In short:
+
+1. Put `wk` on your `PATH`, and create a workspace folder outside your code
+   repositories with `wk init --lanes <YOUR,LANES>`.
+2. Copy `templates/policy.example.yaml` and decide what the coordinator may
+   decide on its own. The example leaves everything risky with you.
+3. Write a coordinator prompt and one lane prompt per piece of work, from the
+   templates.
+4. Start the coordinator in one terminal and each lane in its own working copy,
+   using whichever agent tool you like ([recipes](docs/tools.md)).
+5. Send the coordinator the watcher tick on a schedule, read its updates,
+   resume lanes when it asks, and send the drafts you're happy with.
+
+Start with two lanes on low-risk work, and widen it once you trust it.
+
 ## The commands
 
 | Command | What it does |
@@ -125,15 +143,16 @@ has actually been tried.
 
 The docs are in teaching order. Each builds on the one before.
 
-1. [Concepts](docs/concepts.md): the cast and the props.
-2. [Protocol](docs/protocol.md): the log format, the vocabulary, and status line 1.
-3. [Admission](docs/admission.md): how a lane gets the environment, and how it gives it back.
-4. [Decision rights](docs/decision-rights.md): what the coordinator may decide, written down as data.
-5. [Liveness](docs/liveness.md): who wakes whom, and why you are part of the answer.
-6. [Working with the outside world](docs/working-with-the-outside-world.md): chat, email, and drafts.
-7. [Lessons](docs/lessons.md): what went wrong in real use, and the rule each failure produced.
-8. [Tools](docs/tools.md): recipes for each agent harness.
-9. [The full variant](docs/v2-full-variant.md): the larger first design, and why this one replaced it.
+1. [Getting started](docs/getting-started.md): from an empty folder to a working setup.
+2. [Concepts](docs/concepts.md): the cast and the props.
+3. [Protocol](docs/protocol.md): the log format, the vocabulary, and status line 1.
+4. [Admission](docs/admission.md): how a lane gets the environment, and how it gives it back.
+5. [Decision rights](docs/decision-rights.md): what the coordinator may decide, written down as data.
+6. [Liveness](docs/liveness.md): who wakes whom, and why you are part of the answer.
+7. [Working with the outside world](docs/working-with-the-outside-world.md): chat, email, and drafts.
+8. [Lessons](docs/lessons.md): what went wrong in real use, and the rule each failure produced.
+9. [Tools](docs/tools.md): recipes for each agent harness.
+10. [The full variant](docs/v2-full-variant.md): the larger first design, and why this one replaced it.
 
 The [templates](templates/) folder has the prompts: coordinator, lane, common
 rules, watcher tick, owner update, handover, and review.

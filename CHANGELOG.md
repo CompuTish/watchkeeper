@@ -12,6 +12,7 @@ First public release: the protocol and a starter kit.
 - `wk`, a small command with no dependencies beyond Python 3.10: `init`,
   `post`, `read`, `watch`, `lint`, and `status`.
 - `bin/watch.sh`, a blocking reader in plain POSIX shell.
-- A toy two-lane example that replays in about a second.
+- A toy two-lane example that replays in about a second, and a guide to
+  setting it up on your own project.
 - Tests for the lock, status lines, vocabulary, clock timestamps, secrets,
   delivery, cursors, duplicates, and torn posts, run on Linux and macOS.
