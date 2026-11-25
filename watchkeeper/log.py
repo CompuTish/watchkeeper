@@ -62,7 +62,7 @@ ADMISSION_TYPES = {"ADMITTED", "ENTRY OPEN", "WITHDRAWN", "ACCEPTED+RELEASED", "
 # Types that close an admission.
 CLOSING_TYPES = {"WITHDRAWN", "ACCEPTED+RELEASED"}
 
-WINDOW_RE = re.compile(r"^\d{2}:\d{2}Z-\d{2}:\d{2}Z$")
+WINDOW_RE = re.compile(r"^([01]\d|2[0-3]):[0-5]\dZ-([01]\d|2[0-3]):[0-5]\dZ$")
 OP_RE = re.compile(r"^[A-Z][A-Z0-9-]*$")
 
 

@@ -55,6 +55,14 @@ class ShellReaderAgrees(WorkspaceTest):
         self.assertEqual(quiet.returncode, 2)
         self.assertIn("SILENT ALPHA since", quiet.stdout)
 
+    def test_shell_reader_accepts_a_lower_case_name_and_rejects_a_bad_one(self):
+        self.post("COORDINATOR", "NOTE", "my own", to="ALL LANES")
+        self.post("ALPHA", "REQUEST", "OP-0001", to="COORDINATOR", body="alpha asks")
+        out = self.sh("-t", "0", "coordinator").stdout
+        self.assertIn("alpha asks", out)
+        self.assertNotIn("my own", out)
+        self.assertEqual(self.sh("-t", "0", "../evil").returncode, 1)
+
     def test_shell_reader_flags_torn_posts(self):
         self.append_raw("## ALPHA → COORDINATOR: RELEASED — OP-0001 — 2020-01-01T00:00:00Z\ncut sh")
         self.post("BETA", "REQUEST", "OP-0002", to="COORDINATOR", body="beta asks")

@@ -1,4 +1,4 @@
-"""T1 and T2: the environment lock and status line 1."""
+"""The environment lock and status line 1."""
 
 import time
 import unittest
@@ -6,8 +6,8 @@ import unittest
 from helpers import WorkspaceTest
 
 
-class T01LockRereadsState(WorkspaceTest):
-    """T1: whoever gets the lock second re-reads state and sees busy."""
+class LockRereadsStateAfterAcquiring(WorkspaceTest):
+    """Whoever gets the lock second re-reads state and sees busy."""
 
     def open_entry(self, lane, op):
         self.post("COORDINATOR", "ENTRY OPEN", op, "18:00Z-18:30Z", to=lane)
@@ -47,8 +47,8 @@ class T01LockRereadsState(WorkspaceTest):
         self.assertEqual(codes, [0, 1])
 
 
-class T02MalformedStatusIsBusy(WorkspaceTest):
-    """T2: a status line that cannot be read counts as busy."""
+class MalformedStatusIsBusy(WorkspaceTest):
+    """A status line that cannot be read counts as busy."""
 
     def setUp(self):
         super().setUp()

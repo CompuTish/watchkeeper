@@ -1,4 +1,4 @@
-"""T6, T7, T25, T26, and T27: delivery, cursors, duplicates, and torn posts."""
+"""Delivery, cursors, duplicates, and torn posts."""
 
 import unittest
 
@@ -7,7 +7,7 @@ from helpers import END, WorkspaceTest
 from watchkeeper.log import Workspace
 
 
-class T06AllPostsInOneWindow(WorkspaceTest):
+class AllPostsInOneWindow(WorkspaceTest):
     def test_three_posts_in_one_window_are_all_delivered(self):
         self.post("ALPHA", "REQUEST", "OP-0001", to="COORDINATOR", body="first body")
         self.post("BETA", "REQUEST", "OP-0002", to="COORDINATOR", body="second body")
@@ -32,7 +32,7 @@ class T06AllPostsInOneWindow(WorkspaceTest):
         self.assertNotIn("only my own post", out)
 
 
-class T07AndT27CursorAdvancesOnlyOnAcknowledgement(WorkspaceTest):
+class CursorAdvancesOnlyOnAcknowledgement(WorkspaceTest):
     def read(self):
         return self.wk("read", "--as", "COORDINATOR")[1]
 
@@ -66,7 +66,7 @@ class T07AndT27CursorAdvancesOnlyOnAcknowledgement(WorkspaceTest):
         self.assertIn("lane question", self.read())
 
 
-class T25DuplicateDelivery(WorkspaceTest):
+class DuplicateDelivery(WorkspaceTest):
     def test_redelivered_post_appears_once_and_is_marked(self):
         self.post("ALPHA", "REQUEST", "OP-0001", to="COORDINATOR", body="unique-body-text")
         first = self.wk("read", "--as", "COORDINATOR")[1]
@@ -76,6 +76,12 @@ class T25DuplicateDelivery(WorkspaceTest):
         self.assertEqual(second.count("unique-body-text"), 1)
         self.assertEqual(second.count("REDELIVERED"), 1)
 
+    def test_a_deliberate_repeat_later_on_is_a_new_post(self):
+        self.append_raw("\n## COORDINATOR → ALPHA: WAIT — OP-0001 — 2020-01-01T00:00:00Z\nstill waiting\n" + END + "\n")
+        out = self.post("COORDINATOR", "WAIT", "OP-0001", to="ALPHA", body="still waiting")
+        self.assertIn("posted at line", out)
+        self.assertEqual(self.log_text().count("WAIT — OP-0001"), 2)
+
     def test_retrying_a_post_does_not_write_it_twice(self):
         self.post("COORDINATOR", "GO", "OP-0001", "deploy once", to="ALPHA", body="go")
         out = self.post("COORDINATOR", "GO", "OP-0001", "deploy once", to="ALPHA", body="go")
@@ -83,7 +89,7 @@ class T25DuplicateDelivery(WorkspaceTest):
         self.assertEqual(self.log_text().count("GO — OP-0001 — deploy once"), 1)
 
 
-class T26TornAppend(WorkspaceTest):
+class TornAppend(WorkspaceTest):
     TORN = "## ALPHA → COORDINATOR: RELEASED — OP-0001 — 2020-01-01T00:00:00Z\nresidue zero, evid"
 
     def test_unfinished_last_post_is_not_delivered(self):
@@ -110,6 +116,12 @@ class T26TornAppend(WorkspaceTest):
         self.assertEqual(len(posts), 2)
         self.assertTrue(posts[0].torn)
         self.assertTrue(posts[1].complete)
+
+    def test_lint_is_clean_again_once_the_author_reposts(self):
+        self.append_raw(self.TORN)
+        self.post("ALPHA", "RELEASED", "OP-0001", to="COORDINATOR", body="residue zero, evidence in the card")
+        code, out, _ = self.wk("lint")
+        self.assertEqual(code, 0, out)
 
     def test_positive_control_complete_log_lints_clean(self):
         self.post("ALPHA", "REQUEST", "OP-0001", to="COORDINATOR", body="fine")

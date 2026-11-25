@@ -43,7 +43,10 @@ while getopts "d:t:i:s:a" opt; do
 done
 shift $((OPTIND - 1))
 [ $# -eq 1 ] || usage
-reader=$1
+reader=$(printf '%s' "$1" | tr 'abcdefghijklmnopqrstuvwxyz' 'ABCDEFGHIJKLMNOPQRSTUVWXYZ')
+case $reader in
+    ''|[!A-Z]*|*[!A-Z0-9-]*) echo "watch.sh: reader must be COORDINATOR, OWNER, or a lane name" >&2; exit 1 ;;
+esac
 
 log="$dir/LOG.md"
 lanes="$dir/.watchkeeper/lanes"

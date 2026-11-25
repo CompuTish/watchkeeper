@@ -1,4 +1,4 @@
-"""T4, T5, and T19: vocabulary, clock timestamps, and secrets."""
+"""Vocabulary, clock timestamps, and secrets."""
 
 import unittest
 
@@ -11,7 +11,7 @@ LANES = ["ALPHA", "BETA"]
 GOOD = "## ALPHA → COORDINATOR: REQUEST — OP-0001 — 2030-01-07T18:00:05Z"
 
 
-class T04Vocabulary(unittest.TestCase):
+class Vocabulary(unittest.TestCase):
     def test_positive_control_good_headings_pass(self):
         for h in [
             GOOD,
@@ -29,6 +29,7 @@ class T04Vocabulary(unittest.TestCase):
             "## COORDINATOR → ALPHA: OPEN ENTRY — OP-0001 — 18:05Z-18:35Z — 2030-01-07T18:00:05Z": "paraphrase",
             "## COORDINATOR → ALPHA: ENTRY-OPEN — OP-0001 — 18:05Z-18:35Z — 2030-01-07T18:00:05Z": "paraphrase",
             "## COORDINATOR → ALPHA: ENTRY OPEN — OP-0001 — 2030-01-07T18:00:05Z": "exactly",
+            "## COORDINATOR → ALPHA: ENTRY OPEN — OP-0001 — 99:99Z-00:00Z — 2030-01-07T18:00:05Z": "exactly",
             "## COORDINATOR → ALPHA: ENTRY OPEN — OP-0001 — after BETA — 2030-01-07T18:00:05Z": "exactly",
             "## COORDINATOR → ALPHA: GO — entry open now — 2030-01-07T18:00:05Z": "entry trigger",
             "## ALPHA → BETA: ENTRY OPEN — OP-0001 — 18:05Z-18:35Z — 2030-01-07T18:00:05Z": "may not be posted by ALPHA",
@@ -44,7 +45,7 @@ class T04Vocabulary(unittest.TestCase):
                 self.assertIn(expected, " ".join(errs))
 
 
-class T04PostRefusesBadVocabulary(WorkspaceTest):
+class PostRefusesBadVocabulary(WorkspaceTest):
     def test_post_refuses_and_writes_nothing(self):
         before = self.log_text()
         for args in [
@@ -70,7 +71,7 @@ def p(heading: str, body: str = "body") -> str:
     return f"{heading}\n{body}\n{END}\n\n"
 
 
-class T05TypedTimestamps(unittest.TestCase):
+class TypedTimestamps(unittest.TestCase):
     NOW = "2030-01-07T19:00:00Z"
 
     def lint(self, *posts):
@@ -100,7 +101,7 @@ class T05TypedTimestamps(unittest.TestCase):
                 self.assertIn("clock time", " ".join(errs))
 
 
-class T05PostStampsTheClock(WorkspaceTest):
+class PostStampsTheClock(WorkspaceTest):
     def test_post_writes_the_current_time(self):
         from datetime import datetime, timezone
         out = self.post("ALPHA", "REQUEST", "OP-0001", to="COORDINATOR")
@@ -122,7 +123,7 @@ SECRETS = {
 }
 
 
-class T19Secrets(WorkspaceTest):
+class Secrets(WorkspaceTest):
     def test_positive_control_ordinary_text_is_not_a_secret(self):
         self.assertEqual(find_secrets("Head 1111111. Staging on revision 42. See https://example.test/docs."), [])
 

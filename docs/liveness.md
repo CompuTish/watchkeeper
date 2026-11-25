@@ -16,7 +16,9 @@ wk watch --as COORDINATOR --timeout 1500
 This waits, for up to 25 minutes, until a lane posts. Then it prints the new
 posts and exits, which hands control back to the coordinator. The coordinator
 deals with them, acknowledges them (`wk read --as COORDINATOR --ack`), and
-starts the reader again. On timeout, the reader lists any lane that has been
+starts the reader again. Until they are acknowledged, the reader returns at
+once with the same posts marked `REDELIVERED`, so forgetting to acknowledge
+shows up straight away rather than hiding a post. On timeout, the reader lists any lane that has been
 quiet for two hours or more. `bin/watch.sh` does the same in plain shell.
 
 Keep **exactly one** reader running. Two readers race, and an orphaned reader
@@ -71,7 +73,8 @@ upstream lane. The fixes are simple, and they are the coordinator's job:
 - Check free disk space on every pass. Each lane usually has its own working
   copy and dependencies, and they add up quickly.
 - Don't compute expiry times for credentials or sign-ins. Ask the tool that
-  issued them. A guessed expiry is how a release fails at one in the morning.
+  issued them. A guessed expiry is how a release fails in the middle of the
+  night.
 - Write a handover before the session ends (see
   [templates/handover.md](../templates/handover.md)), so a fresh coordinator
   can resume from the files alone.

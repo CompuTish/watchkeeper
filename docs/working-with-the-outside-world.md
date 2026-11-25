@@ -15,7 +15,7 @@ for named correspondents. For each sweep:
 
 - **Compute the lower bound from the clock.** "Messages since 14:05", where
   14:05 came from `date -u`, not from memory. A sweep that used a time in the
-  future once missed a colleague's message for 20 minutes.
+  future once missed a colleague's message.
 - **Read the sent folder too.** Before telling the owner "you still need to
   reply to X", check that they haven't already.
 - **Record what you saw** in the owner's notes: who, what, and what you

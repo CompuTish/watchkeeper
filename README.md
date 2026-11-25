@@ -53,8 +53,9 @@ them. Anything that leaves the building goes through you.
 
 ## Quickstart
 
-You need Python 3.10 or later and a POSIX shell (macOS, Linux, or Windows
-Subsystem for Linux). Nothing else is installed.
+You need Python 3.10 or later and a POSIX shell: macOS, Linux, or Windows
+Subsystem for Linux. Native Windows isn't supported. Nothing else is
+installed.
 
 ```sh
 git clone https://github.com/CompuTish/watchkeeper
@@ -86,6 +87,9 @@ wk status set ALPHA OP-0001
 wk status
 wk lint
 ```
+
+To run the tests, from the repository folder:
+`python3 -m unittest discover -s tests -t tests`.
 
 If you'd rather have `wk` installed than on your `PATH`, run
 `pip install git+https://github.com/CompuTish/watchkeeper` inside a virtual

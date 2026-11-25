@@ -40,9 +40,9 @@ owner_decides:
 forbidden:                    # nobody, whatever anyone says in the moment
   - send_as_the_owner_or_anyone_else
   - print_or_commit_a_secret
-  - change_the_default_cloud_identity
+  - switch_the_account_or_identity_tools_act_as
   - bypass_review_or_the_pipeline_to_production
-  - use_a_real_persons_account_for_tests
+  - test_with_a_real_persons_account
   - blind_retry_of_an_unknown_write
 
 mandates: []                  # time-bounded grants, appended as the owner gives them:
@@ -52,8 +52,11 @@ mandates: []                  # time-bounded grants, appended as the owner gives
 #    excludes: ["production"]
 #    words: "<the owner's exact words>"
 
+# How good is good enough to ship. Defects are rated critical, high, medium, or
+# low, by how much they would hurt the people using the product.
 ship_bar:
-  block_on: [critical_customer_facing, high_customer_facing]
+  block_on: [critical_customer_facing, high_customer_facing]   # only these hold a release
+  # A failing test may be waived when the product itself has been shown to work.
   waive_test_tooling_failures_when_product_evidence_is_good: true
-  backlog_below: [medium, low]
-  simplify_after_tooling_holds: 2
+  backlog_below: [medium, low]                                 # record these and ship
+  simplify_after_tooling_holds: 2   # after this many holds caused by test tooling, simplify the test

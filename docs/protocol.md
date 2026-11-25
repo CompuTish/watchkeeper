@@ -155,7 +155,10 @@ Two habits matter:
 Even so, a process can die mid-write. A post with no end marker at the very end
 of the log is treated as still being written and isn't delivered yet. A post
 with no end marker followed by another heading is **torn**: readers show it
-with a warning, and `wk lint` fails until someone deals with it. The author
-should re-post it in full. Never edit the log to repair it.
+with a warning, and `wk lint` fails until its author re-posts it in full, with
+the same heading. Never edit the log to repair it.
+
+`wk post` treats an identical post from the same author within ten minutes as
+a retry, and doesn't write it twice. After that, a repeat is a new post.
 
 Next: [admission](admission.md).

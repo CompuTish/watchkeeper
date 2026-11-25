@@ -29,6 +29,7 @@ from .log import (
 from .status import format_line, open_admissions, read_status, reserve
 
 EXIT_OK, EXIT_REFUSED, EXIT_TIMEOUT = 0, 1, 2
+RETRY_WINDOW = timedelta(minutes=10)  # an identical post within this window is treated as a retry
 
 
 def log_head() -> str:
@@ -80,8 +81,8 @@ def cmd_post(ws: Workspace, args) -> int:
     lanes = ws.lanes()
 
     for d in details:
-        if SEP.strip() in d or "\n" in d:
-            raise WatchkeeperError("a heading field may not contain an em dash or a new line")
+        if not d or SEP.strip() in d or "\n" in d:
+            raise WatchkeeperError("a heading field may not be empty or contain an em dash or a new line")
     for line in body.split("\n"):
         if line.startswith("## ") or line.strip() == END or line.strip() == FOOT_MARKER:
             raise WatchkeeperError("the body may not contain a heading or a marker line; indent it to quote it")
@@ -105,12 +106,15 @@ def cmd_post(ws: Workspace, args) -> int:
             if TS_RE.match(last_ts) and parse_ts(ts) + timedelta(seconds=120) < parse_ts(last_ts):
                 raise WatchkeeperError("refused: this machine's clock is behind the last post; fix the clock first")
 
-        # A retry after an unknown outcome must not post twice.
+        # A retry after an unknown outcome must not post twice. A deliberate
+        # repeat later on is a new post, so this only looks back a few minutes.
         mine = [p for p in complete if p.author == author]
         if mine:
             last = mine[-1]
             same_heading = last.heading.rsplit(SEP, 1)[0] == heading.rsplit(SEP, 1)[0]
-            if same_heading and "\n".join(last.body).strip("\n") == body:
+            last_ts = last.fields["ts"] if last.fields else ""
+            recent = TS_RE.match(last_ts) and parse_ts(ts) - parse_ts(last_ts) <= RETRY_WINDOW
+            if same_heading and recent and "\n".join(last.body).strip("\n") == body:
                 print(f"already posted at line {last.start_line}: {last.heading}")
                 return EXIT_OK
 

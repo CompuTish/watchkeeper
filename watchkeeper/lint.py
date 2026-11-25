@@ -88,17 +88,23 @@ def check_heading(heading: str, lanes: list[str]) -> list[str]:
     return errs
 
 
+def reposted(torn: Post, later: list[Post]) -> bool:
+    """A torn post is dealt with once its author re-posts the same heading in full."""
+    key = torn.heading.rsplit(" — ", 1)[0]
+    return any(p.complete and p.heading.rsplit(" — ", 1)[0] == key for p in later)
+
+
 def lint_posts(posts: list[Post], lanes: list[str], now: str | None = None) -> list[str]:
     """Problems across a run of posts: headings, torn posts, clock order, secrets."""
     now_dt = parse_ts(now or now_utc())
     errs = []
     previous = None
-    for p in posts:
+    for i, p in enumerate(posts):
         where = f"line {p.start_line}"
         for e in check_heading(p.heading, lanes):
             errs.append(f"{where}: {e}")
-        if p.torn:
-            errs.append(f"{where}: torn post (a new heading began before its end marker)")
+        if p.torn and not reposted(p, posts[i + 1:]):
+            errs.append(f"{where}: torn post (a new heading began before its end marker); its author should re-post it in full")
         f = p.fields
         if f and TS_RE.match(f["ts"]):
             ts = parse_ts(f["ts"])

@@ -35,8 +35,8 @@ To keep that many agents moving, it grew machinery:
 
 Mostly, the machinery cost more than it saved.
 
-- The log grew to more than 11 megabytes, much of it routine traffic, and
-  became hard for a person to read.
+- The log grew very large, much of it routine traffic, and became hard for a
+  person to read.
 - The thousands of side files had to agree with the log and with each other,
   and keeping them in agreement became work in itself.
 - The watchdog's picture of the world went stale. Its list of lanes was fixed
