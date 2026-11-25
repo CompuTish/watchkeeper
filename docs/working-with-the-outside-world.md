@@ -7,6 +7,23 @@ with all of that safely.
 
 The short version: **it reads widely, drafts freely, and sends nothing.**
 
+## Where the access comes from
+
+Watchkeeper has no connections of its own to chat, email, documents, or
+anything else. The coordinator reaches them through whatever your agent tool
+provides: built-in integrations, connectors, or command-line tools you have
+already signed in to. Watchkeeper supplies the rules for using that access
+safely, which is the rest of this page.
+
+In one setup in daily use, the coordinator can read the code, the team's chat,
+the owner's email, the shared documents, and the sprint board. When a customer
+query, a support ticket, or a colleague's question arrives, a draft reply is
+usually waiting before the owner has opened the message.
+
+Give the coordinator read access first, and only what it needs. Anything that
+writes, such as sending a message or changing a record, stays with the owner
+(see [decision rights](decision-rights.md)).
+
 ## Sweeps
 
 On each watcher tick, the coordinator sweeps the channels the owner has named:
@@ -36,6 +53,9 @@ Good drafts:
 - **Reply to everyone on that message**, unless there is a reason not to.
 - **Use plain language**, and check every factual claim against the live
   system before writing it down.
+- **Name the source.** Each draft says which thread, document, or commit it
+  relies on, so the owner can check it in seconds rather than take it on
+  trust.
 - **Respect the owner's tone.** If they have said "leave them to it", drop the
   follow-up questions.
 

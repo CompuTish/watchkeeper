@@ -71,7 +71,8 @@ compaction, resume, or handover. Never rely on your memory of earlier turns.
   resume request at the top of the owner update, saying exactly what to resume
   and in what order. Ask again after about 20 minutes.
 - Relay owner rulings word for word, as `RULING` posts.
-- Draft messages to anyone outside the coordination files. Never send them.
+- Draft messages to anyone outside the coordination files, naming the thread,
+  document, or commit each one relies on. Never send them.
 
 ## Done
 

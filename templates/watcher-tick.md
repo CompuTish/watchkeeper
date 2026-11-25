@@ -13,7 +13,8 @@ Watcher tick. Do these in order, then return to your loop.
    from `date -u`: chat channels <CHANNELS>, direct messages, and the owner's
    inbox and sent mail for <PEOPLE OR CUSTOMERS>.
 3. For anything that needs a reply, write a draft in the thread of the
-   person's own latest message. Do not send anything.
+   person's own latest message, and name the thread, document, or commit it
+   relies on. Do not send anything.
 4. Record each change of state in the owner's notes: one line each, with the
    time from the clock.
 5. Make sure exactly one blocking reader is running. Start one if none is,
